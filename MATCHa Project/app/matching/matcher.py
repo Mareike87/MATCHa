@@ -1,5 +1,4 @@
 
-
 def get_matches(attr1, attr2, sim_matrix, threshold):
     """Takes a similarity matrix, a threshold and two lists of attributes to be compared.
     Returns a list of tuples where each tuple represents a matched attribute and its similarity.
