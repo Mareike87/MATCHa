@@ -35,5 +35,5 @@ def combine_two(sim1, sim2, weights):
     result_sim = np.zeros(sim1.shape)
     for i in range(sim1.shape[0]):
         for j in range(sim1.shape[1]):
-            result_sim[i][j] = (weights[0]*2*sim1[i][j] + weights[1]*2*sim2[i][j]) / 2
+            result_sim[i][j] = weights[0]*sim1[i][j] + weights[1]*sim2[i][j]
     return result_sim
