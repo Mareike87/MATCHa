@@ -13,16 +13,28 @@ def st_sim(embedding1, embedding2):
 def cosine(vec1, vec2):
     return float(np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2)))
 
-def combine_sims(sim_matrices, weights):
+def combine_sims(sim_matrices, weights=None, clip=True):
     sim_matrices = np.asarray(sim_matrices)
-    weights = np.asarray(weights)
-    if not np.isclose(sum(weights), 1):
-        # Default to equal weights
-        # TODO: Add exception handling here
-        print("Since weights do not sum up to 1 equal weights will be used by default.")
-        weights = [1/sim_matrices.shape[0]]*sim_matrices.shape[0]
+    # If only one matrix is given transform shape to allow computation
+    if sim_matrices.ndim == 2:
+        sim_matrices = sim_matrices[None, :, :]
+    # If no weights are given set equal weights
+    if weights is None:
+        weights = np.full(sim_matrices.shape[0], 1/sim_matrices.shape[0])
+    else:
+        weights = np.asarray(weights)
+        # If weights do not sum to 1 set equal weights
+        if not np.isclose(sum(weights), 1):
+            # TODO: Add exception handling here
+            print("Since weights do not sum up to 1 equal weights will be used by default.")
+            weights = np.full(sim_matrices.shape[0], 1/sim_matrices.shape[0])
+
     weighted = sim_matrices * weights[:, None, None]
     result_sim = weighted.sum(axis=0)
+    # Clip to [0,1] since float calculations may lead to values outside this range
+    if clip:
+        result_sim = np.clip(result_sim, 0, 1)
+
     return result_sim
 
 
