@@ -13,6 +13,7 @@ def st_sim(embedding1, embedding2):
 def cosine(vec1, vec2):
     return float(np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2)))
 
+
 def combine_sims(sim_matrices, weights=None, clip=True):
     sim_matrices = np.asarray(sim_matrices)
     # If only one matrix is given transform shape to allow computation
