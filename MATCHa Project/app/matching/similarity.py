@@ -18,6 +18,7 @@ def cosine(emb1, emb2, eps=1e-8):
     # Cosine similarity = dot product of normalized vectors
     return (emb1_norm @ emb2_norm.T + 1.0) / 2.0
 
+
 def combine_sims(sim_matrices, weights=None, clip=True):
     sim_matrices = np.asarray(sim_matrices)
     # If only one matrix is given transform shape to allow computation
