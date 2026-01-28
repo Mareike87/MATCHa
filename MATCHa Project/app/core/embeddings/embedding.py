@@ -29,17 +29,21 @@ def mean_decomp(embedding1, embedding2):
     mean_vec = np.mean(np.vstack([embedding1, embedding2]), axis=0)
     emb1_new = embedding1 - mean_vec
     emb2_new = embedding2 - mean_vec
-    norms1 = np.linalg.norm(emb1_new, axis=1)
-    norms2 = np.linalg.norm(emb2_new, axis=1)
-
-    print(norms1.min(), norms1.max())
-    print(norms2.min(), norms2.max())
     emb1_new /= np.linalg.norm(emb1_new, axis=1, keepdims=True)
     emb2_new /= np.linalg.norm(emb2_new, axis=1, keepdims=True)
     return emb1_new, emb2_new
 
-def pca_decomposition(embedding1, embedding2):
+# FUNKTIONIERT NICHT
+# TODO: implement mean-centering for correct pca removal
+def pca_decomposition(embeddings1, embeddings2, components):
     # embeddings zusammenfassen
+    embeddings = np.concatenate([embeddings1, embeddings2])
     # auf embeddings pca-decomposen
+    pca = PCA(n_components=components).fit(embeddings)
+    comp = pca.components_
     # ausgebesserte embeddings zurückgeben
-    return
+    emb1_new = embeddings1 - (embeddings1 @ comp.T) @ comp
+    emb2_new = embeddings2 - (embeddings2 @ comp.T) @ comp
+    emb1_new /= np.linalg.norm(emb1_new, axis=1, keepdims=True)
+    emb2_new /= np.linalg.norm(emb2_new, axis=1, keepdims=True)
+    return emb1_new, emb2_new
