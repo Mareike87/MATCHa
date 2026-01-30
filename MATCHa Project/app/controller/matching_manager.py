@@ -45,8 +45,8 @@ def call_stuff(df1, df2, matchers, weights, threshold, prnt_sim = False, prnt_ma
         print(matches)
     return sim_matrix, matches
 
-file_name1 = TESTDATA_DIR / 'prelim_datasets' / 'ncvoter_A1.csv'
-file_name2 = TESTDATA_DIR / 'prelim_datasets' / 'ncvoter_B1.csv'
+file_name1 = TESTDATA_DIR / 'prelim_datasets' / 'steam_A1.csv'
+file_name2 = TESTDATA_DIR / 'prelim_datasets' / 'steam_B1.csv'
 
 df1_data = read_file(file_name1, ",")
 df2_data = read_file(file_name2, ",")
@@ -69,6 +69,31 @@ print(df2)
 emb1 = embed(df1)
 emb2 = embed(df2)
 
-call_stuff(df1, df2, [Matcher.JAC, Matcher.EMB], [0.6, 0.4], 0.7, False, True)
-call_stuff(df1, df2, [Matcher.JAC, Matcher.EMB_MEAN], [0.6, 0.4], 0.7, False, True)
+#call_stuff(df1, df2, [Matcher.JAC, Matcher.EMB], [0.4, 0.6], 0.6, False, True)
+#call_stuff(df1, df2, [Matcher.JAC, Matcher.EMB_MEAN], [0.4, 0.6], 0.6, False, True)
+
+# compare also with emb with numeric calcs:
+
+sim_emb = cosine(emb1, emb2)
+e1, e2 = mean_decomp(emb1, emb2)
+sim_emb_mean = cosine(e1, e2)
+sim_jac = jaccard_sim(df1, df2, 3)
+sim_overlap = find_overlap(df1_data, df2_data, 0.5)
+
+comb_ov_emb = combine_sims([sim_emb, sim_jac, sim_overlap], [0.6, 0.3, 0.1])
+comb_ov_mean = combine_sims([sim_emb_mean, sim_jac, sim_overlap], [0.6, 0.3, 0.1])
+comb_emb = combine_sims([sim_emb, sim_jac], [0.65, 0.35])
+comb_mean = combine_sims([sim_emb_mean, sim_jac], [0.65, 0.35])
+
+print("nn + nn:")
+print(get_matches(df1, df2, comb_emb, 0.7))
+print("nn + mn:")
+print(get_matches(df1, df2, comb_mean, 0.7))
+print("ol + nn:")
+print(get_matches(df1, df2, comb_ov_emb, 0.7))
+print("ol + mn:")
+print(get_matches(df1, df2, comb_ov_mean, 0.7))
+print("--------------------------------------------------")
+print(get_matches(df1, df2, sim_emb, 0.7))
+print(get_matches(df1, df2, sim_emb_mean, 0.7))
 
