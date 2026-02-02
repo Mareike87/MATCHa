@@ -7,7 +7,7 @@ def find_equal_types(df1, df2):
     #.values =
     types1 = df1.dtypes.values[:, None]
     types2 = df2.dtypes.values[None, :]
-
+    
     return (types1 == types2).astype(int)
 
 def numeric_profile(values, percentile):

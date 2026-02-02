@@ -1,16 +1,32 @@
 import numpy as np
-from pprint import pprint
 from enum import Enum
+
+import pandas as pd
 
 from paths import TESTDATA_DIR
 from app.matching.matcher import get_matches
 from app.core.embeddings.embedding import embed, mean_decomp, pca_decomposition
-from app.matching.similarity import st_sim, combine_two, combine_sims, cosine
+from app.matching.similarity import combine_sims, cosine
 from app.utils.input import read_headers, read_file
 from app.core.string_based.sim_measures import lev_similarity, jaccard_sim
-from app.core.metadata.metadata import find_equal_types, find_overlap
+from app.core.constraint_based.constraint_based import find_equal_types, find_overlap
 
 """Currently mainly used for trialing and execution."""
+
+class Matching_Config:
+    matchers: list
+    weights: list
+    threshold: float
+    jac_token: int = 3
+    overlap_percentile: int = 50
+    prnt_sim: bool = False
+    prnt_matches: bool = True
+
+class Matching_Data:
+    attributes1: list
+    attributes2: list
+    data1: pd.DataFrame
+    data2: pd.DataFrame
 
 class Matcher(Enum):
     JAC = 1
@@ -20,28 +36,30 @@ class Matcher(Enum):
     OVERLAP = 5
     DTYPES = 6
 
-# TODO: add Overlap sim & Dtypes
-def call_stuff(df1, df2, matchers, weights, threshold, prnt_sim = False, prnt_matches = False):
+def pipeline(data:Matching_Data, config:Matching_Config):
     sims = []
-    emb1 = embed(df1)
-    emb2 = embed(df2)
-    for matcher in matchers:
+    for matcher in config.matchers:
         if matcher == Matcher.JAC:
-            sims.append(jaccard_sim(df1, df2, 3))
+            sims.append(jaccard_sim(data.attributes1, data.attributes2, config.jac_token))
         elif matcher == Matcher.LEV:
-            sims.append(lev_similarity(df1, df2))
-        elif matcher == Matcher.EMB:
-            sims.append(cosine(emb1, emb2))
-        elif matcher == Matcher.EMB_MEAN:
-            e1, e2 = mean_decomp(emb1, emb2)
-            sims.append(cosine(e1, e2))
-    sim_matrix = combine_sims(sims, weights)
-    if prnt_sim:
-        print("Similarity matrix:")
+            sims.append(lev_similarity(data.attributes1, data.attributes2))
+        elif matcher == Matcher.OVERLAP:
+            sims.append(find_overlap(data.data1, data.data2, config.overlap_percentile))
+        elif matcher == Matcher.DTYPES:
+            sims.append(find_equal_types(data.data1, data.data2))
+        else:
+            emb1 = embed(data.attributes1)
+            emb2 = embed(data.attributes2)
+            if matcher == Matcher.EMB:
+                sims.append(cosine(emb1, emb2))
+            elif matcher == Matcher.EMB_MEAN:
+                e1, e2 = mean_decomp(emb1, emb2)
+                sims.append(cosine(e1, e2))
+    sim_matrix = combine_sims(sims, config.weights)
+    if config.prnt_sim:
         print(sim_matrix)
-    matches = get_matches(df1, df2, sim_matrix, threshold)
-    if prnt_matches:
-        print("Matches:")
+    matches = get_matches(data.attributes1, data.attributes2, sim_matrix, config.threshold)
+    if config.prnt_matches:
         print(matches)
     return sim_matrix, matches
 
