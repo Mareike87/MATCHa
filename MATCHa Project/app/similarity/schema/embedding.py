@@ -47,3 +47,12 @@ def pca_decomposition(embeddings1, embeddings2, components):
     emb1_new /= np.linalg.norm(emb1_new, axis=1, keepdims=True)
     emb2_new /= np.linalg.norm(emb2_new, axis=1, keepdims=True)
     return emb1_new, emb2_new
+
+# Calculates a basic cosine similarity for single vectors
+def cosine(emb1, emb2, eps=1e-8):
+    # L2-normalize
+    emb1_norm = emb1 / np.maximum(np.linalg.norm(emb1, axis=1, keepdims=True), eps)
+    emb2_norm = emb2 / np.maximum(np.linalg.norm(emb2, axis=1, keepdims=True), eps)
+
+    # Cosine similarity = dot product of normalized vectors
+    return (emb1_norm @ emb2_norm.T + 1.0) / 2.0

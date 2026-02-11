@@ -1,15 +1,15 @@
-import numpy as np
 from enum import Enum
 
 import pandas as pd
 
 from paths import TESTDATA_DIR
 from app.matching.matcher import get_matches
-from app.core.embeddings.embedding import embed, mean_decomp, pca_decomposition
-from app.matching.similarity import combine_sims, cosine
+from app.similarity.schema.embedding import embed, mean_decomp
+from app.similarity.aggregation import combine_sims
+from app.similarity.schema.embedding import cosine
 from app.utils.input import read_headers, read_file
-from app.core.string_based.sim_measures import lev_similarity, jaccard_sim
-from app.core.constraint_based.constraint_based import find_equal_types, find_overlap
+from app.similarity.schema.string import lev_similarity, jaccard_sim
+from app.similarity.schema.type import find_equal_types, find_overlap
 
 """Currently mainly used for trialing and execution."""
 
