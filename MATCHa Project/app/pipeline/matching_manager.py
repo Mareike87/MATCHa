@@ -5,11 +5,12 @@ import pandas as pd
 from paths import TESTDATA_DIR
 from app.matching.matcher import get_matches
 from app.similarity.schema.embedding import embed, mean_decomp
-from app.similarity.aggregation import combine_sims
+from app.similarity.aggregation import combine_sims_weighted
 from app.similarity.schema.embedding import cosine
 from app.utils.input import read_headers, read_file
 from app.similarity.schema.string import lev_similarity, jaccard_sim
-from app.similarity.schema.type import find_equal_types, find_overlap
+from app.similarity.schema.type import find_equal_types
+from app.similarity.instance.numerical import find_overlap
 
 """Currently mainly used for trialing and execution."""
 
@@ -55,7 +56,7 @@ def pipeline(data:Matching_Data, config:Matching_Config):
             elif matcher == Matcher.EMB_MEAN:
                 e1, e2 = mean_decomp(emb1, emb2)
                 sims.append(cosine(e1, e2))
-    sim_matrix = combine_sims(sims, config.weights)
+    sim_matrix = combine_sims_weighted(sims, config.weights)
     if config.prnt_sim:
         print(sim_matrix)
     matches = get_matches(data.attributes1, data.attributes2, sim_matrix, config.threshold)
@@ -98,10 +99,10 @@ sim_emb_mean = cosine(e1, e2)
 sim_jac = jaccard_sim(df1, df2, 3)
 sim_overlap = find_overlap(df1_data, df2_data, 0.5)
 
-comb_ov_emb = combine_sims([sim_emb, sim_jac, sim_overlap], [0.6, 0.3, 0.1])
-comb_ov_mean = combine_sims([sim_emb_mean, sim_jac, sim_overlap], [0.6, 0.3, 0.1])
-comb_emb = combine_sims([sim_emb, sim_jac], [0.65, 0.35])
-comb_mean = combine_sims([sim_emb_mean, sim_jac], [0.65, 0.35])
+comb_ov_emb = combine_sims_weighted([sim_emb, sim_jac, sim_overlap], [0.6, 0.3, 0.1])
+comb_ov_mean = combine_sims_weighted([sim_emb_mean, sim_jac, sim_overlap], [0.6, 0.3, 0.1])
+comb_emb = combine_sims_weighted([sim_emb, sim_jac], [0.65, 0.35])
+comb_mean = combine_sims_weighted([sim_emb_mean, sim_jac], [0.65, 0.35])
 
 print("nn + nn:")
 print(get_matches(df1, df2, comb_emb, 0.7))

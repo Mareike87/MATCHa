@@ -12,7 +12,7 @@ def aggregate_sim_top_k(sim_matrices, k):
     return np.mean(top_k, axis=2)
 
 # combines a number of sim matrices via weighted sum
-def combine_sims(sim_matrices, weights=None, clip=True):
+def combine_sims_weighted(sim_matrices, masks, weights=None, clip=True):
     sim_matrices = np.asarray(sim_matrices)
     # If only one matrix is given transform shape to allow computation
     if sim_matrices.ndim == 2:
@@ -28,10 +28,22 @@ def combine_sims(sim_matrices, weights=None, clip=True):
             print("Since weights do not sum up to 1 equal weights will be used by default.")
             weights = np.full(sim_matrices.shape[0], 1/sim_matrices.shape[0])
 
-    weighted = sim_matrices * weights[:, None, None]
+    weighted = sim_matrices * masks * weights[:, None, None]
     result_sim = weighted.sum(axis=0)
     # Clip to [0,1] since float calculations may lead to values outside this range
     if clip:
         result_sim = np.clip(result_sim, 0, 1)
-
     return result_sim
+
+# TODO: hier noch masks einbauen
+def combine_sims_var(sim_matrices, clip=True):
+    vars = np.array([np.var(sim) for sim in sim_matrices])
+    weights = vars / np.sum(vars)
+    weighted = sim_matrices * weights[:, None, None]
+    result_sim = weighted.sum(axis=0)
+    if clip:
+        result_sim = np.clip(result_sim, 0, 1)
+    return result_sim
+
+def combine_sims_var_topk(sim_matrices, k, clip=True):
+    vars = np.array([np.var(sim) for sim in sim_matrices])

@@ -11,7 +11,7 @@ def lev_similarity(df1, df2):
     for i in range(len(df1)):
         for j in range(len(df2)):
             sim_matrix[i][j] = Levenshtein.ratio(df1[i], df2[j])
-    return sim_matrix
+    return sim_matrix, np.full((len(df1), len(df2)), 1)
 
 
 # Calculates the jaccard similarity for two arrays of strings
@@ -22,7 +22,7 @@ def jaccard_sim(df1, df2, token_size):
     for i in range(len(df1)):
         for j in range(len(df2)):
             sim_matrix[i][j] = jaccard_word(df1[i], df2[j], token_size)
-    return sim_matrix
+    return sim_matrix, np.full((len(df1), len(df2)), 1)
 
 
 # Calculates the jaccard similarity for two strings, using tokens of size token_size

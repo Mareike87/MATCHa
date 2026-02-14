@@ -55,4 +55,4 @@ def cosine(emb1, emb2, eps=1e-8):
     emb2_norm = emb2 / np.maximum(np.linalg.norm(emb2, axis=1, keepdims=True), eps)
 
     # Cosine similarity = dot product of normalized vectors
-    return (emb1_norm @ emb2_norm.T + 1.0) / 2.0
+    return (emb1_norm @ emb2_norm.T + 1.0) / 2.0, np.full((emb1.shape[0], emb2.shape[0]), 1)
