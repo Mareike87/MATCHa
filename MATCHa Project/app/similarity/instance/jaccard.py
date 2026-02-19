@@ -1,29 +1,23 @@
 import numpy as np
+import pandas as pd
 
 
+# Idee: nimm die k (z.B. 50) häufigsten Einträge einer Spalte und vergleiche Sie mit den k häufigsten Einträgen einer anderen Spalte
+# Wichtig: es muss eine Normalisierung stattfinden, um den Vergleich zu verbessern (lowercase, maybe weitere String-Optionen?)
+# Wichtig: ist die Kardinalität eines Eintrages zu niedrig (z.B. ist in der Spalte jeder Eintrag unique) nutze das Ergebnis nicht → Mask
+    # bzw ist das Ergebnis dann einfach ein Stichproben-Wert?
 
-def jaccard_sim(df1, df2, token_size):
-    sim_matrix = np.zeros((len(df1), len(df2)))
-    for i in range(len(df1)):
-        for j in range(len(df2)):
-            sim_matrix[i][j] = jaccard_word(df1[i], df2[j], token_size)
-    return sim_matrix
+def get_top_k_entries(column, k, isNumber):
+    column = pd.DataFrame(column)
+    if not isNumber:
+        column = (column.astype(str)
+                  .str.lower()
+                  .str.strip()
+                  .str.replace(r"\s+", " ", regex=True))
+    top_k = column.value_counts(normalize=True).head(k)
+    return top_k
 
-# berechnet jaccard für zwei wörter
-def jaccard_word(str1, str2, token_size):
-    str1 = str1.lower()
-    str2 = str2.lower()
-    same_tokens = 0
-    str1 = " "*(token_size-1) + str1 + " "*(token_size-1)
-    str2 = " "*(token_size-1) + str2 + " "*(token_size-1)
-    tokens1 = []
-    tokens2 = []
-    for i in range(len(str1)):
-        tokens1.append(str1[i:i+token_size])
-    for i in range(len(str2)):
-        tokens2.append(str2[i:i+token_size])
-    for i in range(len(tokens1)):
-        for j in range(len(tokens2)):
-            if tokens1[i] == tokens2[j]:
-                same_tokens += 1
-    return same_tokens / (len(tokens1)+len(tokens2)-same_tokens)
+def comp_top_k(top_k1, top_k2):
+    for entry in top_k1:
+        if entry in top_k2:
+            
