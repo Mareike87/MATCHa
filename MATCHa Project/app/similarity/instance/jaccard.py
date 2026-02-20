@@ -14,10 +14,19 @@ def get_top_k_entries(column, k, isNumber):
                   .str.lower()
                   .str.strip()
                   .str.replace(r"\s+", " ", regex=True))
-    top_k = column.value_counts(normalize=True).head(k)
+    top_k = column.value_counts().head(k)
     return top_k
 
 def comp_top_k(top_k1, top_k2):
-    for entry in top_k1:
-        if entry in top_k2:
-            
+    i = top_k1.index
+    j = top_k2.index
+    intersection = set(i).intersection(set(j))
+    union = set(i).union(set(j))
+    if len(union) == 0:
+        return 0
+    return len(intersection) / len(union)
+
+def top_k_sim(df1, df2, k):
+
+
+    return
