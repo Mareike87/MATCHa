@@ -30,8 +30,8 @@ def find_overlap(df1, df2, percentile):
     for idx in col_index_2:
         profiles_2.append((idx, numeric_profile(df2.iloc[:, idx], percentile)))
 
-    sim_matrix = np.full((df1.shape[1], df2.shape[1]), 0)
-    mask = np.full((df1.shape[1], df2.shape[1]), 0)
+    sim_matrix = np.zeros((df1.shape[1], df2.shape[1]))
+    mask = np.zeros((df1.shape[1], df2.shape[1]))
 
     for entry1 in profiles_1:
         for entry2 in profiles_2:
