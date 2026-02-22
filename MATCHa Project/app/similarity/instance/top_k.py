@@ -14,11 +14,9 @@ def get_top_k_entries(column, k, isNumber):
                   .str.lower()
                   .str.strip()
                   .str.replace(r"\s+", " ", regex=True))
-    ######## WARNING: Hier zerschießt irgendwas die SERIES! CHECK VARIABLE TYPE TRANSFORMATIONS
-    val_counts = column.value_counts()
-    num_unique_entries = val_counts.count()
-    top_k = val_counts.head(k)
-    if num_unique_entries/column.count() > 0.8 or top_k.count() == 0:
+    num_unique_entries = column.value_counts().count()
+    top_k = column.value_counts().head(k)
+    if num_unique_entries/column.count() > 0.9 or top_k.count() == 0:
         return top_k, False
     return top_k, True
 
@@ -40,15 +38,15 @@ def top_k_sim(df1, df2, k):
     top_k1 = []
     valid1 = []
     for col in df1.columns:
-        top_k_uno, validu = get_top_k_entries(df1[col], k, pd.api.types.is_numeric_dtype(df1[col]))
-        top_k1.append(top_k_uno)
-        valid1.append(validu)
+        top_k, valid = get_top_k_entries(df1[col], k, pd.api.types.is_numeric_dtype(df1[col]))
+        top_k1.append(top_k)
+        valid1.append(valid)
     top_k2 = []
     valid2 = []
     for col in df2.columns:
-        top_k_dos, validd = get_top_k_entries(df2[col], k, pd.api.types.is_numeric_dtype(df2[col]))
-        top_k2.append(top_k_dos)
-        valid2.append(validd)
+        top_k, valid = get_top_k_entries(df2[col], k, pd.api.types.is_numeric_dtype(df2[col]))
+        top_k2.append(top_k)
+        valid2.append(valid)
 
     for i in range(m):
         for j in range(n):
