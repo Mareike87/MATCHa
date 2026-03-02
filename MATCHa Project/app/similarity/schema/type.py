@@ -65,7 +65,6 @@ def find_type_similarity(df1, df2):
     for i in range(m):
         for j in range(n):
             sim[i, j] = type_compat.get((types1[i], types2[j]), 0)
-
     mask = np.ones((m, n))
     return sim, mask
 
