@@ -38,7 +38,10 @@ def combine_sims_weighted(sim_matrices, masks, weights=None, clip=True):
 # TODO: hier noch masks einbauen
 def combine_sims_var(sim_matrices, masks, clip=True):
     variances = np.array([np.var(sim) for sim in sim_matrices])
+    masks = np.asarray(masks)
+    sim_matrices = np.asarray(sim_matrices)
     weights = variances / np.sum(variances)
+    print(weights)
     weighted = sim_matrices * masks * weights[:, None, None]
     result_sim = weighted.sum(axis=0)
     if clip:

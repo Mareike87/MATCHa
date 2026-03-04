@@ -51,8 +51,6 @@ def top_k_sim(df1, df2, k):
     for i in range(m):
         for j in range(n):
             if valid1[i] and valid2[j]:
-                print(type(top_k1[i]))
-                print(type(top_k2[j]))
                 sim[i, j] = comp_top_k(top_k1[i], top_k2[j])
             else: mask[i, j] = 0
 

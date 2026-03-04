@@ -20,6 +20,7 @@ def embed(text):
     """
     return model.encode(text, convert_to_numpy=True)
 
+
 def mean_decomp(embedding1, embedding2):
     """
     Calculates the mean of all given embeddings and subtracts it from all the given embeddings

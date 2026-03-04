@@ -19,3 +19,5 @@ def read_headers(file_name, delimiter):
 
 
 def read_mappings(file_name):
+    df = pd.read_csv(file_name, header=None, names=["A", "B"])
+    return set(map(tuple, df.values))
