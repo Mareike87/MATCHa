@@ -24,7 +24,6 @@ def combine_sims_weighted(sim_matrices, masks, weights=None, clip=True):
         weights = np.asarray(weights)
         # If weights do not sum to 1 set equal weights
         if not np.isclose(sum(weights), 1):
-            # TODO: Add exception handling here
             print("Since weights do not sum up to 1 equal weights will be used by default.")
             weights = np.full(sim_matrices.shape[0], 1/sim_matrices.shape[0])
 
@@ -35,7 +34,6 @@ def combine_sims_weighted(sim_matrices, masks, weights=None, clip=True):
         result_sim = np.clip(result_sim, 0, 1)
     return result_sim
 
-# TODO: hier noch masks einbauen
 def combine_sims_var(sim_matrices, masks, clip=True):
     variances = np.array([np.var(sim) for sim in sim_matrices])
     masks = np.asarray(masks)
