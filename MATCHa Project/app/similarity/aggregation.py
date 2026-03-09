@@ -34,17 +34,32 @@ def combine_sims_weighted(sim_matrices, masks, weights=None, clip=True):
         result_sim = np.clip(result_sim, 0, 1)
     return result_sim
 
+
+
 def combine_sims_var(sim_matrices, masks, clip=True):
-    variances = np.array([np.var(sim) for sim in sim_matrices])
-    masks = np.asarray(masks)
+    masks = np.asarray(masks).astype(bool)
     sim_matrices = np.asarray(sim_matrices)
-    weights = variances / np.sum(variances)
-    print(weights)
+    size = sim_matrices.shape[1]*sim_matrices.shape[2]
+
+    variances = []
+    coverages = []
+    for sim, mask in zip(sim_matrices, masks):
+        valid_entries = sim[mask]
+        if valid_entries.size == 0:
+            variances.append(0)
+            coverages.append(0)
+        variances.append(np.var(valid_entries))
+        coverages.append(valid_entries.size / size)
+    variances = np.array(variances)
+    coverages = np.array(coverages)
+    #weights = variances / np.sum(variances)
+    weights = np.sqrt(variances) * np.sqrt(coverages)
+    if np.sum(weights) > 0: # TODO: handle case of == 0 here
+        weights = weights / np.sum(weights)
+    #print(weights)
     weighted = sim_matrices * masks * weights[:, None, None]
     result_sim = weighted.sum(axis=0)
     if clip:
         result_sim = np.clip(result_sim, 0, 1)
     return result_sim
 
-def combine_sims_var_topk(sim_matrices, k, clip=True):
-    vars = np.array([np.var(sim) for sim in sim_matrices])
