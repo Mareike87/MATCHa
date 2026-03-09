@@ -1,5 +1,4 @@
 import time
-from wsgiref import headers
 
 from app.pipeline.matching_manager import run_matching
 from app.similarity.instance.numerical import find_overlap
@@ -10,12 +9,32 @@ from app.utils.input import read_headers, read_file, read_mappings
 from app.similarity.schema.embedding import embed, cosine, mean_decomp
 from app.similarity.aggregation import combine_sims_var
 from app.matching.matcher import get_matches
+from paths import TESTDATA_DIR
 
+# diabetesA = TESTDATA_DIR / 'final_datasets' / 'diabetes' / 'diabetes_lv3_A.csv'
+# diabetesB = TESTDATA_DIR / 'final_datasets' / 'diabetes' / 'diabetes_lv3_B.csv'
+# gt_diabetes = TESTDATA_DIR / 'ground_truth' / 'diabetes_lv3_map.csv'
+#
+# gymA = TESTDATA_DIR / 'final_datasets' / 'gym_members' / 'gym_lv3_A.csv'
+# gymB = TESTDATA_DIR / 'final_datasets' / 'gym_members' / 'gym_lv3_B.csv'
+# gt_gym = TESTDATA_DIR / 'ground_truth' / 'gym_lv3_map.csv'
+#
+# steamA = TESTDATA_DIR / 'final_datasets' / 'steam' / 'steam_lv3_A.csv'
+# steamB = TESTDATA_DIR / 'final_datasets' / 'steam' / 'steam_lv3_B.csv'
+# gt_steam = TESTDATA_DIR / 'ground_truth' / 'steam_lv3_map.csv'
 
-def run_experiment(datapath1, datapath2, gt_file, delimiter, schema, instance):
+def get_dataset_files(base):
+    base = str(base)
+    return (
+        base + "A.csv",
+        base + "B.csv",
+        base + "map.csv"
+    )
+
+def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, instance):
     gt = read_mappings(gt_file)
     start = time.time()
-    matches = run_matching(datapath1, datapath2, delimiter, 0.9, schema, instance, )
+    matches = run_matching(datapath1, datapath2, delimiter, threshold, schema, instance, )
     matches = [m[:2] for m in matches]
     end = time.time()
     tp = 0
@@ -32,18 +51,25 @@ def run_experiment(datapath1, datapath2, gt_file, delimiter, schema, instance):
     if tp + fp > 0:
         precision = tp / (tp + fp)
     else:
-        print("sorry, your matcher is so shit it hasn't found a single match")
-        return
-    if tp + fn > 0:
-        recall = tp / (tp + fn)
+        precision = None
+    recall = tp / (tp + fn)
+    if precision is None or recall+precision == 0:
+        f1_score = None
     else:
-        print("your matcher appears to have somehow found nothing and everything at the same time. How is this possible?")
-    f1_score = 2 * precision * recall / (precision + recall)
+        f1_score = 2 * precision * recall / (precision + recall)
     runtime = end - start
-    print(matches)
+    #print(matches)
     return {
         "precision": precision,
         "recall": recall,
         "f1_score": f1_score,
         "runtime": runtime
     }
+
+
+# print("Threshold: 0,6")
+# result = run_experiment(diabetesA, diabetesB, gt_diabetes, ',', 0.6,True, False)
+# result2 = run_experiment(diabetesA, diabetesB, gt_diabetes, ',', 0.6,True, True)
+# result3 = run_experiment(diabetesA, diabetesB, gt_diabetes, ',',0.6, False, True)
+# print(str(result.get("f1_score"))+ " " +str(result2.get("f1_score"))+ " " +str(result3.get("f1_score")))
+

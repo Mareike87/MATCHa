@@ -14,46 +14,46 @@ from app.similarity.instance.top_k import *
 def test_removal_unique():
     # Tests for removal of a value that only appears once, as well as string normalizations
     col = ["got", "got", "be", "As", "as", "  as", "bring me", "bring  me"]
-    result = get_top_k_entries(col, 50, False)
+    result, ignore = get_top_k_entries(col, 50, False)
     expected = pd.Series({"as": 3, "got": 2, "bring me": 2}, name="count")
     pd.testing.assert_series_equal(result, expected, check_dtype=False)
 
 def test_no_candidates():
     # Tests that no viable candidates for top_k leads to empty series
     col = ["", "got", "as", "had"]
-    result = get_top_k_entries(col, 50, False)
+    result, ignore = get_top_k_entries(col, 50, False)
     assert result.empty == True
 
 # Tests for comp_top_k
 def test_correct_comp():
     col1 = ["got", "got", "be", "As", "as", "  as", "bring me", "bring  me"]
     col2 = ["got", "had", "had  ", "as", "As", "bring me", "bring me", "be", "Be", "BE"]
-    top_1 = get_top_k_entries(col1, 50, False) # got, as, bring me
-    top_2 = get_top_k_entries(col2, 50, False) # had, as, bring me, be
+    top_1, ignore = get_top_k_entries(col1, 50, False) # got, as, bring me
+    top_2, ignore = get_top_k_entries(col2, 50, False) # had, as, bring me, be
     result = comp_top_k(top_1, top_2)
     assert result == 2/5
 
 def test_no_intersection():
     col1 = ["got", "got", "be", "As", "as", "  as", "bring me", "bring  me"]
     col2 = ["had", "had ", "none", "blue", "BLUE"]
-    top_1 = get_top_k_entries(col1, 50, False)
-    top_2 = get_top_k_entries(col2, 50, False)
+    top_1, ignore = get_top_k_entries(col1, 50, False)
+    top_2, ignore = get_top_k_entries(col2, 50, False)
     result = comp_top_k(top_1, top_2)
     assert result == 0
 
 def test_no_union():
     col1 = ["got", "be", "As", "bring me"]
     col2 = ["had", "haid ", "none", "blues", "BLUE"]
-    top_1 = get_top_k_entries(col1, 50, False)
-    top_2 = get_top_k_entries(col2, 50, False)
+    top_1, ignore = get_top_k_entries(col1, 50, False)
+    top_2, ignore = get_top_k_entries(col2, 50, False)
     result = comp_top_k(top_1, top_2)
     assert result == 0
 
 def test_comp_empty():
     col1 = ["", "got", "as", "had"]
     col2 = ["had", "had ", "none", "blue", "BLUE"]
-    top_1 = get_top_k_entries(col1, 50, False)
-    top_2 = get_top_k_entries(col2, 50, False)
+    top_1, ignore = get_top_k_entries(col1, 50, False)
+    top_2, ignore = get_top_k_entries(col2, 50, False)
     result = comp_top_k(top_1, top_2)
     assert result == 0
 

@@ -13,28 +13,27 @@ from app.utils.input import read_headers, read_file
 from app.similarity.schema.string import lev_similarity, jaccard_sim
 #from app.similarity.schema.type import find_equal_types
 from app.similarity.instance.numerical import find_overlap
-from app.evaluation.evaluation import run_experiment
 
 """Currently mainly used for trialing and execution."""
 
-diabetesA = TESTDATA_DIR / 'final_datasets' / 'diabetes' / 'diabetes_lv3_A.csv'
-diabetesB = TESTDATA_DIR / 'final_datasets' / 'diabetes' / 'diabetes_lv3_B.csv'
-gt_diabetes = TESTDATA_DIR / 'ground_truth' / 'diabetes_3_mapping.csv'
-
-gymA = TESTDATA_DIR / 'final_datasets' / 'gym_members' / 'gym_lv3_A.csv'
-gymB = TESTDATA_DIR / 'final_datasets' / 'gym_members' / 'gym_lv3_B.csv'
-gt_gym = TESTDATA_DIR / 'ground_truth' / 'gym_3_mapping.csv'
-
-steamA = TESTDATA_DIR / 'final_datasets' / 'steam' / 'steam_lv1_A.csv'
-steamB = TESTDATA_DIR / 'final_datasets' / 'steam' / 'steam_lv1_B.csv'
-gt_steam = TESTDATA_DIR / 'ground_truth' / 'steam_1_mapping.csv'
+# diabetesA = TESTDATA_DIR / 'final_datasets' / 'diabetes' / 'diabetes_lv3_A.csv'
+# diabetesB = TESTDATA_DIR / 'final_datasets' / 'diabetes' / 'diabetes_lv3_B.csv'
+# gt_diabetes = TESTDATA_DIR / 'ground_truth' / 'diabetes_lv3_map.csv'
+#
+# gymA = TESTDATA_DIR / 'final_datasets' / 'gym_members' / 'gym_lv3_A.csv'
+# gymB = TESTDATA_DIR / 'final_datasets' / 'gym_members' / 'gym_lv3_B.csv'
+# gt_gym = TESTDATA_DIR / 'ground_truth' / 'gym_lv3_map.csv'
+#
+# steamA = TESTDATA_DIR / 'final_datasets' / 'steam' / 'steam_lv1_A.csv'
+# steamB = TESTDATA_DIR / 'final_datasets' / 'steam' / 'steam_lv1_B.csv'
+# gt_steam = TESTDATA_DIR / 'ground_truth' / 'steam_lv1_map.csv'
 
 def run_matching(datapath1, datapath2, delimiter, threshold,schema=True, instance=True):
     similarities = []
     masks = []
+    headers1 = read_headers(datapath1, delimiter)
+    headers2 = read_headers(datapath2, delimiter)
     if schema:  # caution: sollte hier nur embeddings || mean embed?
-        headers1 = read_headers(datapath1, delimiter)
-        headers2 = read_headers(datapath2, delimiter)
         # embeddings:
         emb1 = embed(headers1)
         emb2 = embed(headers2)
@@ -62,11 +61,11 @@ def run_matching(datapath1, datapath2, delimiter, threshold,schema=True, instanc
         similarities.append(sim)
         masks.append(mask)
         # overlap percentile
-        sim, mask = find_overlap(df1, df2, 50)  # 50 or different? adjustment opportunity
+        sim, mask = find_overlap(df1, df2, 50)
         similarities.append(sim)
         masks.append(mask)
         # top k
-        sim, mask = top_k_sim(df1, df2, 50)  # 50 or different? adjustment opportunity
+        sim, mask = top_k_sim(df1, df2, 50)
         similarities.append(sim)
         masks.append(mask)
     sim_final = combine_sims_var(similarities, masks)
@@ -74,9 +73,6 @@ def run_matching(datapath1, datapath2, delimiter, threshold,schema=True, instanc
     return matches
 
 
-result = run_experiment(gymA, gymB, gt_gym, ',', True, False)
-print(result)
-result2 = run_experiment(gymA, gymB, gt_gym, ',', True, True)
-print(result2)
+
 
 # CURRENT PROBLEM: Type checks sind nicht nuanciert genug -> führen zu hoher Varianz -> werden zu hoch gewichtet. Das ist schlecht.
