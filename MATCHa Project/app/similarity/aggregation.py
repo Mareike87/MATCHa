@@ -34,8 +34,6 @@ def combine_sims_weighted(sim_matrices, masks, weights=None, clip=True):
         result_sim = np.clip(result_sim, 0, 1)
     return result_sim
 
-
-
 def combine_sims_var(sim_matrices, masks, clip=True):
     masks = np.asarray(masks).astype(bool)
     sim_matrices = np.asarray(sim_matrices)

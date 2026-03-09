@@ -71,8 +71,3 @@ def run_matching(datapath1, datapath2, delimiter, threshold,schema=True, instanc
     sim_final = combine_sims_var(similarities, masks)
     matches = get_matches(headers1, headers2, sim_final, threshold)
     return matches
-
-
-
-
-# CURRENT PROBLEM: Type checks sind nicht nuanciert genug -> führen zu hoher Varianz -> werden zu hoch gewichtet. Das ist schlecht.

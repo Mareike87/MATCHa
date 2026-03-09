@@ -1,4 +1,3 @@
-import pandas as pd
 import numpy as np
 
 # Put all possible datatypes into one of the categories

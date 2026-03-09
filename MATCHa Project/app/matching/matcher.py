@@ -13,8 +13,3 @@ def get_matches(attr1, attr2, sim_matrix, threshold):
         attr_matches.append((attr1[i], attr2[j], sim_matrix[i][j]))
     attr_matches.sort(key=lambda x: x[2], reverse=True)
     return attr_matches
-
-
-## TODO:
-def get_top_k_matches(attr1, attr2, sim_matrix, k):
-    sim_matrix.nlargest(k, "")

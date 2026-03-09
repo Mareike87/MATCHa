@@ -11,17 +11,6 @@ from app.similarity.aggregation import combine_sims_var
 from app.matching.matcher import get_matches
 from paths import TESTDATA_DIR
 
-# diabetesA = TESTDATA_DIR / 'final_datasets' / 'diabetes' / 'diabetes_lv3_A.csv'
-# diabetesB = TESTDATA_DIR / 'final_datasets' / 'diabetes' / 'diabetes_lv3_B.csv'
-# gt_diabetes = TESTDATA_DIR / 'ground_truth' / 'diabetes_lv3_map.csv'
-#
-# gymA = TESTDATA_DIR / 'final_datasets' / 'gym_members' / 'gym_lv3_A.csv'
-# gymB = TESTDATA_DIR / 'final_datasets' / 'gym_members' / 'gym_lv3_B.csv'
-# gt_gym = TESTDATA_DIR / 'ground_truth' / 'gym_lv3_map.csv'
-#
-# steamA = TESTDATA_DIR / 'final_datasets' / 'steam' / 'steam_lv3_A.csv'
-# steamB = TESTDATA_DIR / 'final_datasets' / 'steam' / 'steam_lv3_B.csv'
-# gt_steam = TESTDATA_DIR / 'ground_truth' / 'steam_lv3_map.csv'
 
 def get_dataset_files(base):
     base = str(base)
@@ -66,10 +55,4 @@ def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, 
         "runtime": runtime
     }
 
-
-# print("Threshold: 0,6")
-# result = run_experiment(diabetesA, diabetesB, gt_diabetes, ',', 0.6,True, False)
-# result2 = run_experiment(diabetesA, diabetesB, gt_diabetes, ',', 0.6,True, True)
-# result3 = run_experiment(diabetesA, diabetesB, gt_diabetes, ',',0.6, False, True)
-# print(str(result.get("f1_score"))+ " " +str(result2.get("f1_score"))+ " " +str(result3.get("f1_score")))
 

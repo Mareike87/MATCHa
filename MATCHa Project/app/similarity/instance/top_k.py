@@ -2,11 +2,6 @@ import numpy as np
 import pandas as pd
 
 
-# Idee: nimm die k (z.B. 50) häufigsten Einträge einer Spalte und vergleiche Sie mit den k häufigsten Einträgen einer anderen Spalte
-# Wichtig: es muss eine Normalisierung stattfinden, um den Vergleich zu verbessern (lowercase, maybe weitere String-Optionen?)
-# Wichtig: ist die Kardinalität eines Eintrages zu niedrig (z.B. ist in der Spalte jeder Eintrag unique) nutze das Ergebnis nicht → Mask
-    # bzw ist das Ergebnis dann einfach ein Stichproben-Wert?
-
 def get_top_k_entries(column, k, isNumber):
     column = pd.Series(column)
     if not isNumber:
