@@ -1,16 +1,10 @@
 import time
+import pandas as pd
+import matplotlib.pyplot as plt
 
 from app.pipeline.matching_manager import run_matching
-from app.similarity.instance.numerical import find_overlap
-from app.similarity.instance.top_k import top_k_sim
-from app.similarity.schema.string import jaccard_sim, lev_similarity
-from app.similarity.schema.type import find_type_similarity
-from app.utils.input import read_headers, read_file, read_mappings
-from app.similarity.schema.embedding import embed, cosine, mean_decomp
-from app.similarity.aggregation import combine_sims_var
-from app.matching.matcher import get_matches
-from paths import TESTDATA_DIR
-
+from app.utils.input import read_mappings
+from paths import *
 
 def get_dataset_files(base):
     base = str(base)
@@ -47,7 +41,7 @@ def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, 
     else:
         f1_score = 2 * precision * recall / (precision + recall)
     runtime = end - start
-    #print(matches)
+    print(matches)
     return {
         "precision": precision,
         "recall": recall,
@@ -56,3 +50,33 @@ def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, 
     }
 
 
+def make_graph(csv_path):
+    # CSV einlesen
+    df = pd.read_csv(csv_path)
+
+    # Nach Level gruppieren und Mittelwerte berechnen
+    grouped = df.groupby("level")[["precision", "recall", "f1-score"]].mean().reset_index()
+
+    # Sortieren nach Level (1,2,3)
+    grouped = grouped.sort_values("level")
+
+    # Plot erstellen
+    plt.figure()
+
+    plt.plot(grouped["level"], grouped["precision"], marker="o", label="Precision")
+    plt.plot(grouped["level"], grouped["recall"], marker="o", label="Recall")
+    plt.plot(grouped["level"], grouped["f1-score"], marker="o", label="F1-score")
+
+    plt.scatter(df["level"], df["f1-score"], color="black", alpha=0.6, label="F1 individual")
+
+    plt.xlabel("Level")
+    plt.ylabel("Score")
+    plt.title("Precision, Recall und F1-Score nach Level")
+    plt.xticks([1, 2, 3])
+    plt.legend()
+    plt.grid(True)
+
+    plt.show()
+
+#path = RESULTS_DIR / 'results.csv'
+#make_graph(path)

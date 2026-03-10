@@ -26,7 +26,7 @@ def jaccard_sim(df1, df2, token_size=3):
 
 
 # Calculates the jaccard similarity for two strings, using tokens of size token_size
-def jaccard_word(str1, str2, token_size):
+def jaccard_word(str1, str2, token_size=3):
     str1 = str1.lower()
     str2 = str2.lower()
     same_tokens = 0
@@ -34,9 +34,9 @@ def jaccard_word(str1, str2, token_size):
     str2 = " "*(token_size-1) + str2 + " "*(token_size-1)
     tokens1 = []
     tokens2 = []
-    for i in range(len(str1)):
+    for i in range(len(str1)-(token_size-1)):
         tokens1.append(str1[i:i+token_size])
-    for i in range(len(str2)):
+    for i in range(len(str2)-(token_size-1)):
         tokens2.append(str2[i:i+token_size])
     for i in range(len(tokens1)):
         for j in range(len(tokens2)):
