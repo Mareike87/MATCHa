@@ -54,7 +54,6 @@ type_compat = {
 for (a, b), val in list(type_compat.items()):
     type_compat[(b, a)] = val
 
-## NOTE TO SELF: shape[0] = Zeilen, shape[1] = Spalten
 def find_type_similarity(df1, df2):
     m = df1.shape[1]
     n = df2.shape[1]

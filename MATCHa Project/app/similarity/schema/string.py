@@ -16,8 +16,10 @@ def lev_similarity(df1, df2):
 
 # Calculates the jaccard similarity for two arrays of strings
 # Returns a similarity matrix
-# TODO: add exception for invalid token sizes
 def jaccard_sim(df1, df2, token_size=3):
+    if token_size < 2 or token_size > 20:
+        print("Invalid token size, token size will be set to 3.")
+        token_size = 3
     sim_matrix = np.zeros((len(df1), len(df2)))
     for i in range(len(df1)):
         for j in range(len(df2)):

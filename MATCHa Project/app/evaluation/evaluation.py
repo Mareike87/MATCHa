@@ -9,9 +9,9 @@ from paths import *
 def get_dataset_files(base):
     base = str(base)
     return (
-        base + "A.csv",
-        base + "B.csv",
-        base + "map.csv"
+        base + "A1.csv",
+        base + "B1.csv",
+        base + "Mapping.csv"
     )
 
 def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, instance):
@@ -41,7 +41,7 @@ def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, 
     else:
         f1_score = 2 * precision * recall / (precision + recall)
     runtime = end - start
-    print(matches)
+    #print(matches)
     return {
         "precision": precision,
         "recall": recall,
@@ -55,28 +55,27 @@ def make_graph(csv_path):
     df = pd.read_csv(csv_path)
 
     # Nach Level gruppieren und Mittelwerte berechnen
-    grouped = df.groupby("level")[["precision", "recall", "f1-score"]].mean().reset_index()
+    grouped = df.groupby("config")[["precision", "recall", "f1-score"]].mean().reset_index()
 
     # Sortieren nach Level (1,2,3)
-    grouped = grouped.sort_values("level")
+    grouped = grouped.sort_values("config")
 
     # Plot erstellen
     plt.figure()
 
-    plt.plot(grouped["level"], grouped["precision"], marker="o", label="Precision")
-    plt.plot(grouped["level"], grouped["recall"], marker="o", label="Recall")
-    plt.plot(grouped["level"], grouped["f1-score"], marker="o", label="F1-score")
+    plt.plot(grouped["config"], grouped["precision"], marker="o", label="Precision")
+    plt.plot(grouped["config"], grouped["recall"], marker="o", label="Recall")
+    plt.plot(grouped["config"], grouped["f1-score"], marker="o", label="F1-score")
 
-    plt.scatter(df["level"], df["f1-score"], color="black", alpha=0.6, label="F1 individual")
 
-    plt.xlabel("Level")
+    plt.xlabel("Config")
     plt.ylabel("Score")
-    plt.title("Precision, Recall und F1-Score nach Level")
+    plt.title("Precision, Recall und F1-Score nach Config")
     plt.xticks([1, 2, 3])
     plt.legend()
     plt.grid(True)
 
     plt.show()
 
-#path = RESULTS_DIR / 'results.csv'
-#make_graph(path)
+path = RESULTS_DIR / 'results.csv'
+make_graph(path)
