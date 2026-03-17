@@ -46,8 +46,9 @@ def combine_sims_var(sim_matrices, masks, clip=True):
         if valid_entries.size == 0:
             variances.append(0)
             coverages.append(0)
-        variances.append(np.var(valid_entries))
-        coverages.append(valid_entries.size / size)
+        else:
+            variances.append(np.var(valid_entries))
+            coverages.append(valid_entries.size / size)
     variances = np.array(variances)
     coverages = np.array(coverages)
     #weights = variances / np.sum(variances)

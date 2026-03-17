@@ -9,7 +9,6 @@ def read_file(file_name, delimiter):
         delimiter = ','
     return pd.read_csv(file_name, delimiter=delimiter)
 
-
 # Reads solely the first line (headers) of a csv-file
 # Returns a pandas table containing these
 def read_headers(file_name, delimiter):

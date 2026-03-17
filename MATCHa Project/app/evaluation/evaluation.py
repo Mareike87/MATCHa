@@ -17,7 +17,7 @@ def get_dataset_files(base):
 def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, instance):
     gt = read_mappings(gt_file)
     start = time.time()
-    matches = run_matching(datapath1, datapath2, delimiter, threshold, schema, instance, )
+    matches = run_matching(datapath1, datapath2, delimiter, threshold, schema, instance)
     matches = [m[:2] for m in matches]
     end = time.time()
     tp = 0
@@ -48,7 +48,6 @@ def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, 
         "f1_score": f1_score,
         "runtime": runtime
     }
-
 
 def make_graph(csv_path):
     # CSV einlesen

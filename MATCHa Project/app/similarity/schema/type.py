@@ -1,7 +1,7 @@
 import numpy as np
 
 # Put all possible datatypes into one of the categories
-def dtype_to_category(dtype):
+def dtype_to_category(dtype, series=None):
     kind = np.dtype(dtype).kind
     if kind in ('i', 'u'):
         return "Integer"
@@ -11,12 +11,17 @@ def dtype_to_category(dtype):
         return "Boolean"
     if kind in ('U', 'S'):
         return "String"
-    if kind == 'O':
-        return "Object"
     if kind == 'M':
         return "Date"
     if kind == 'm':
         return "Timedelta"
+    if kind == 'O':
+        # zusätzliche Prüfung nötig
+        if series is not None:
+            # Prüfe ob Mehrheit Strings sind
+            if series.dropna().map(type).eq(str).mean() > 0.8:
+                return "String"
+        return "Object"
     return "Object"  # Fallback
 
 # Similarity table to compare types
@@ -58,8 +63,8 @@ def find_type_similarity(df1, df2):
     m = df1.shape[1]
     n = df2.shape[1]
     sim = np.zeros((m, n))
-    types1 = [dtype_to_category(dt) for dt in df1.dtypes]
-    types2 = [dtype_to_category(dt) for dt in df2.dtypes]
+    types1 = [dtype_to_category(df1[col].dtype, df1[col]) for col in df1.columns]
+    types2 = [dtype_to_category(df2[col].dtype, df2[col]) for col in df2.columns]
     for i in range(m):
         for j in range(n):
             sim[i, j] = type_compat.get((types1[i], types2[j]), 0)

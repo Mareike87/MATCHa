@@ -46,7 +46,7 @@ def test_find_type_similarity_identical_types():
     assert mask[0,0] == 1
 
 def test_find_type_similarity_string_object():
-    df1 = pd.DataFrame({"a":["x","y"]})
+    df1 = pd.DataFrame({"a":["xy","yx"]})
     df2 = pd.DataFrame({"b":[object(),object()]})
     sim, mask = find_type_similarity(df1, df2)
     assert sim[0,0] == type_compat[("String","Object")]

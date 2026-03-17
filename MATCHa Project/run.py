@@ -3,7 +3,7 @@ import pandas as pd
 from app.evaluation.evaluation import run_experiment, get_dataset_files
 from paths import *
 
-diabetes3path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_3/' + 'diab_lv3_'
+diabetes3path = 'C:/Users/Steff/Desktop/Generated Datasets/Steam/Steam_Level_3/' + 'steam_lv3_'
 
 results = []
 for i in range(1,101):

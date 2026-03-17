@@ -6,6 +6,8 @@ def get_matches(attr1, attr2, sim_matrix, threshold):
     Returns a list of tuples where each tuple represents a matched attribute and its similarity.
     The tuples are sorted by descending similarity.
     """
+    if len(sim_matrix) == 0:
+        return []
     sim_matrix = np.asarray(sim_matrix)
     row_index, col_index = np.where(sim_matrix >= threshold)
     attr_matches = []

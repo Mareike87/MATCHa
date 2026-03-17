@@ -1,4 +1,5 @@
 import numpy as np
+import re
 
 import Levenshtein
 
@@ -29,8 +30,8 @@ def jaccard_sim(df1, df2, token_size=3):
 
 # Calculates the jaccard similarity for two strings, using tokens of size token_size
 def jaccard_word(str1, str2, token_size=3):
-    str1 = str1.lower()
-    str2 = str2.lower()
+    str1 = re.sub(r"\s+", "", str1.lower().strip())
+    str2 = re.sub(r"\s+", "", str2.lower().strip())
     same_tokens = 0
     str1 = " "*(token_size-1) + str1 + " "*(token_size-1)
     str2 = " "*(token_size-1) + str2 + " "*(token_size-1)
