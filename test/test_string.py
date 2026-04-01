@@ -19,7 +19,7 @@ def test_lev_similarity_matrix_values():
     df1 = ["book","boook"]
     df2 = ["book","supercalifragilistic"]
     sim, mask = lev_similarity(df1, df2)
-    expected = np.array([[1,0],[8/9,0]])
+    expected = np.array([[1,0],[0.8,0]])
     np.testing.assert_array_equal(sim, expected)
     assert np.all(mask == 1)
 

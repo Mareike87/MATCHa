@@ -11,7 +11,10 @@ def lev_similarity(df1, df2):
     sim_matrix = np.zeros((len(df1), len(df2)))
     for i in range(len(df1)):
         for j in range(len(df2)):
-            sim_matrix[i][j] = Levenshtein.ratio(df1[i], df2[j])
+            str1 = re.sub(r"\s+", "", df1[i].lower().strip())
+            str2 = re.sub(r"\s+", "", df2[j].lower().strip())
+            distance = Levenshtein.distance(str1, str2)
+            sim_matrix[i][j] = 1 - distance/max(len(str1), len(str2))
     return sim_matrix, np.ones((len(df1), len(df2)))
 
 
@@ -35,14 +38,12 @@ def jaccard_word(str1, str2, token_size=3):
     same_tokens = 0
     str1 = " "*(token_size-1) + str1 + " "*(token_size-1)
     str2 = " "*(token_size-1) + str2 + " "*(token_size-1)
-    tokens1 = []
-    tokens2 = []
+    tokens1 = set()
+    tokens2 = set()
     for i in range(len(str1)-(token_size-1)):
-        tokens1.append(str1[i:i+token_size])
+        tokens1.add(str1[i:i+token_size])
     for i in range(len(str2)-(token_size-1)):
-        tokens2.append(str2[i:i+token_size])
-    for i in range(len(tokens1)):
-        for j in range(len(tokens2)):
-            if tokens1[i] == tokens2[j]:
-                same_tokens += 1
-    return same_tokens / (len(tokens1)+len(tokens2)-same_tokens)
+        tokens2.add(str2[i:i+token_size])
+    intersection = tokens1.intersection(tokens2)
+    union = tokens1.union(tokens2)
+    return len(intersection) / len(union)

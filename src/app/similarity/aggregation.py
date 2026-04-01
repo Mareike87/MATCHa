@@ -51,7 +51,6 @@ def combine_sims_var(sim_matrices, masks, clip=True):
             coverages.append(valid_entries.size / size)
     variances = np.array(variances)
     coverages = np.array(coverages)
-    #weights = variances / np.sum(variances)
     weights = np.sqrt(variances) * np.sqrt(coverages)
     if np.sum(weights) > 0: # TODO: handle case of == 0 here
         weights = weights / np.sum(weights)

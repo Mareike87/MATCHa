@@ -30,8 +30,8 @@ def mean_decomp(embedding1, embedding2):
     mean_vec = np.mean(np.vstack([embedding1, embedding2]), axis=0)
     emb1_new = embedding1 - mean_vec
     emb2_new = embedding2 - mean_vec
-    emb1_new /= np.linalg.norm(emb1_new, axis=1, keepdims=True)
-    emb2_new /= np.linalg.norm(emb2_new, axis=1, keepdims=True)
+    # emb1_new /= np.linalg.norm(emb1_new, axis=1, keepdims=True)
+    # emb2_new /= np.linalg.norm(emb2_new, axis=1, keepdims=True)
     return emb1_new, emb2_new
 
 # Calculates a basic cosine similarity for single vectors

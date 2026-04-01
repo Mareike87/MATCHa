@@ -32,16 +32,6 @@ def test_mean_decomp_shapes_preserved():
     assert e2.shape == emb2.shape
 
 
-def test_mean_decomp_normalized_vectors():
-    emb1 = np.random.rand(2,4)
-    emb2 = np.random.rand(2,4)
-    e1, e2 = mean_decomp(emb1, emb2)
-    norms1 = np.linalg.norm(e1, axis=1)
-    norms2 = np.linalg.norm(e2, axis=1)
-    assert np.allclose(norms1, 1)
-    assert np.allclose(norms2, 1)
-
-
 def test_mean_decomp_mean_centering():
     emb1 = np.array([[1.0,2.0],[3.0,4.0]])
     emb2 = np.array([[5.0,6.0]])

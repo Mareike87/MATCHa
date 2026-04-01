@@ -16,23 +16,14 @@ from app.similarity.instance.numerical import find_overlap
 
 """Currently mainly used for trialing and execution."""
 
-# diabetesA = TESTDATA_DIR / 'final_datasets' / 'diabetes' / 'diabetes_lv3_A.csv'
-# diabetesB = TESTDATA_DIR / 'final_datasets' / 'diabetes' / 'diabetes_lv3_B.csv'
-# gt_diabetes = TESTDATA_DIR / 'ground_truth' / 'diabetes_lv3_map.csv'
-#
-# gymA = TESTDATA_DIR / 'final_datasets' / 'gym_members' / 'gym_lv3_A.csv'
-# gymB = TESTDATA_DIR / 'final_datasets' / 'gym_members' / 'gym_lv3_B.csv'
-# gt_gym = TESTDATA_DIR / 'ground_truth' / 'gym_lv3_map.csv'
-#
-# steamA = TESTDATA_DIR / 'final_datasets' / 'steam' / 'steam_lv1_A.csv'
-# steamB = TESTDATA_DIR / 'final_datasets' / 'steam' / 'steam_lv1_B.csv'
-# gt_steam = TESTDATA_DIR / 'ground_truth' / 'steam_lv1_map.csv'
-
 def run_matching(datapath1, datapath2, delimiter, threshold,schema=True, instance=True):
     similarities = []
     masks = []
     headers1 = read_headers(datapath1, delimiter)
     headers2 = read_headers(datapath2, delimiter)
+    if not schema and not instance:
+        print("please select either schema, instance or both")
+        return None
     if schema:  # caution: sollte hier nur embeddings || mean embed?
         # embeddings:
         emb1 = embed(headers1)
