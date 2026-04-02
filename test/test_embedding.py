@@ -6,11 +6,6 @@ from sentence_transformers import SentenceTransformer
 from app.similarity.schema.embedding import get_model, embed, mean_decomp, cosine
 
 
-def test_get_model_returns_sentence_transformer():
-    model = get_model()
-    assert isinstance(model, SentenceTransformer)
-
-
 def test_embed_single_string_returns_numpy():
     emb = embed("hello world")
     assert isinstance(emb, np.ndarray)
@@ -69,3 +64,7 @@ def test_cosine_handles_zero_vector():
     emb2 = np.array([[1.0,0.0]])
     sim, mask = cosine(emb1, emb2)
     assert sim.shape == (1,1)
+
+def test_get_model_returns_sentence_transformer():
+    model = get_model()
+    assert isinstance(model, SentenceTransformer)
