@@ -8,6 +8,7 @@ from app.pipeline.matching_manager import run_matching
 from app.utils.input import read_mappings
 from paths import *
 
+# paths for eval
 # diabetes1path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_1/' + 'diab_lv1_'
 # diabetes2path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_2/' + 'diab_lv2_'
 # diabetes3path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_3/' + 'diab_lv3_'
@@ -24,6 +25,7 @@ from paths import *
 #
 # datasets = [diabetes, gym, steam]
 
+# util function for running datasets, which conform to these specific naming conventions
 def get_dataset_files(base):
     base = str(base)
     return (
@@ -32,6 +34,8 @@ def get_dataset_files(base):
         base + "Mapping.csv"
     )
 
+# runs chosen matchers on the specified datapaths with the specified ground truth file. Returns precision, recall,
+# f1-score, average similarity of the found matches and runtime
 def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, instance):
     gt = read_mappings(gt_file)
     start = time.time()
@@ -70,6 +74,7 @@ def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, 
         "runtime": runtime
     }
 
+# runs each of the specified datasets in datasets and saves the results to a csv file
 def runeach_and_save():
     c = 0
     results = []

@@ -3,8 +3,6 @@ import re
 
 import Levenshtein
 
-"""String similarity measures are implemented here."""
-
 # A basic Levenshtein similarity for two String Lists.
 # Returns the similarity matrix
 def lev_similarity(df1, df2):

@@ -1,11 +1,10 @@
 import pandas as pd
 import numpy as np
 
+# Takes a similarity matrix, a threshold and two lists of attributes to be compared.
+# Returns a list of triples where each triple represents two matched attributes and their similarity.
+# The triples are sorted by descending similarity.
 def get_matches(attr1, attr2, sim_matrix, threshold):
-    """Takes a similarity matrix, a threshold and two lists of attributes to be compared.
-    Returns a list of tuples where each tuple represents a matched attribute and its similarity.
-    The tuples are sorted by descending similarity.
-    """
     if len(sim_matrix) == 0:
         return []
     sim_matrix = np.asarray(sim_matrix)

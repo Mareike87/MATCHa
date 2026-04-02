@@ -55,10 +55,11 @@ type_compat = {
     ("Date", "Timedelta"): 0.1,
     ("Timedelta", "Timedelta"): 1,
 }
-
+# fill table for symmetry
 for (a, b), val in list(type_compat.items()):
     type_compat[(b, a)] = val
 
+# retrieves type similarity for all column pairs from the table, returns sim-matrix and mask
 def find_type_similarity(df1, df2):
     m = df1.shape[1]
     n = df2.shape[1]
