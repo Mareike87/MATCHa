@@ -32,7 +32,7 @@ while check:
     except ValueError:
         print("Invalid threshold value. Please try again.")
 
-matches = run_matching(a, b, ',', threshold, schema, instance)
+matches = run_matching(a, b, ',', threshold, schema, instance, False)
 matches = [(x,y) for x,y,z in matches]
 matches.sort()
 

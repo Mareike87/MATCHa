@@ -9,7 +9,7 @@ from app.similarity.schema.string import lev_similarity, jaccard_sim
 from app.similarity.instance.numerical import find_overlap
 
 # runs the matching pipeline based on the given parameters
-def run_matching(datapath1, datapath2, delimiter, threshold,schema=True, instance=True):
+def run_matching(datapath1, datapath2, delimiter, threshold,schema=True, instance=True, includeEmbeddings=True):
     similarities = []
     masks = []
     headers1 = read_headers(datapath1, delimiter)
@@ -18,18 +18,19 @@ def run_matching(datapath1, datapath2, delimiter, threshold,schema=True, instanc
         print("please select either schema, instance or both")
         return None
     if schema:
-        # generate embeddings
-        emb1 = embed(headers1)
-        emb2 = embed(headers2)
-        # cosine similarity on normal embeddings
-        sim, mask = cosine(emb1, emb2)
-        similarities.append(sim)
-        masks.append(mask)
-        # mean decomposition and cosine similarity
-        emb1, emb2 = mean_decomp(emb1, emb2)
-        sim, mask = cosine(emb1, emb2)
-        similarities.append(sim)
-        masks.append(mask)
+        if includeEmbeddings:
+            # generate embeddings
+            emb1 = embed(headers1)
+            emb2 = embed(headers2)
+            # cosine similarity on normal embeddings
+            sim, mask = cosine(emb1, emb2)
+            similarities.append(sim)
+            masks.append(mask)
+            # mean decomposition and cosine similarity
+            emb1, emb2 = mean_decomp(emb1, emb2)
+            sim, mask = cosine(emb1, emb2)
+            similarities.append(sim)
+            masks.append(mask)
         # Jaccard similarity
         sim, mask = jaccard_sim(headers1, headers2, 3)  # 3 or differen? adjustment opportunity
         similarities.append(sim)
