@@ -1,6 +1,4 @@
-import pandas as pd
-
-from app.evaluation.evaluation import run_experiment, get_dataset_files
+from app.evaluation.evaluation import get_dataset_files
 from app.pipeline.matching_manager import run_matching
 from app.utils.input import read_mappings
 from paths import *

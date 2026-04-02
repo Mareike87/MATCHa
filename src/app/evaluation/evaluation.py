@@ -8,21 +8,21 @@ from app.pipeline.matching_manager import run_matching
 from app.utils.input import read_mappings
 from paths import *
 
-diabetes1path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_1/' + 'diab_lv1_'
-diabetes2path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_2/' + 'diab_lv2_'
-diabetes3path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_3/' + 'diab_lv3_'
-gym1path = 'C:/Users/Steff/Desktop/Generated Datasets/Gym/Gym_Level_1/' + 'gym_lv1_'
-gym2path = 'C:/Users/Steff/Desktop/Generated Datasets/Gym/Gym_Level_2/' + 'gym_lv2_'
-gym3path = 'C:/Users/Steff/Desktop/Generated Datasets/Gym/Gym_Level_3/' + 'gym_lv3_'
-steam1path = 'C:/Users/Steff/Desktop/Generated Datasets/Steam/Steam_Level_1/' + 'steam_lv1_'
-steam2path = 'C:/Users/Steff/Desktop/Generated Datasets/Steam/Steam_Level_2/' + 'steam_lv2_'
-steam3path = 'C:/Users/Steff/Desktop/Generated Datasets/Steam/Steam_Level_3/' + 'steam_lv3_'
-
-diabetes = [(diabetes1path, "Diabetes"), (diabetes2path, "Diabetes"), (diabetes3path, "Diabetes")]
-gym = [(gym1path, "Gym"), (gym2path, "Gym"), (gym3path, "Gym")]
-steam = [(steam1path, "Steam"), (steam2path, "Steam"), (steam3path, "Steam")]
-
-datasets = [diabetes, gym, steam]
+# diabetes1path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_1/' + 'diab_lv1_'
+# diabetes2path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_2/' + 'diab_lv2_'
+# diabetes3path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_3/' + 'diab_lv3_'
+# gym1path = 'C:/Users/Steff/Desktop/Generated Datasets/Gym/Gym_Level_1/' + 'gym_lv1_'
+# gym2path = 'C:/Users/Steff/Desktop/Generated Datasets/Gym/Gym_Level_2/' + 'gym_lv2_'
+# gym3path = 'C:/Users/Steff/Desktop/Generated Datasets/Gym/Gym_Level_3/' + 'gym_lv3_'
+# steam1path = 'C:/Users/Steff/Desktop/Generated Datasets/Steam/Steam_Level_1/' + 'steam_lv1_'
+# steam2path = 'C:/Users/Steff/Desktop/Generated Datasets/Steam/Steam_Level_2/' + 'steam_lv2_'
+# steam3path = 'C:/Users/Steff/Desktop/Generated Datasets/Steam/Steam_Level_3/' + 'steam_lv3_'
+#
+# diabetes = [(diabetes1path, "Diabetes"), (diabetes2path, "Diabetes"), (diabetes3path, "Diabetes")]
+# gym = [(gym1path, "Gym"), (gym2path, "Gym"), (gym3path, "Gym")]
+# steam = [(steam1path, "Steam"), (steam2path, "Steam"), (steam3path, "Steam")]
+#
+# datasets = [diabetes, gym, steam]
 
 def get_dataset_files(base):
     base = str(base)
@@ -118,3 +118,4 @@ def load_data(csv_path):
     df = df.rename(columns={"f1-score": "f1"})
     return df
 
+#runeach_and_save()
