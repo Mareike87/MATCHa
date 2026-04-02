@@ -2,7 +2,18 @@ import numpy as np
 
 from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer("google/embeddinggemma-300m")
+model = None
+
+def load_model():
+    global model
+    if model is None:
+        try:
+            from sentence_transformers import SentenceTransformer
+            model = SentenceTransformer("google/embeddinggemma-300m")
+        except Exception as e:
+            print("Embedding model could not be loaded:", e)
+            model = None
+    return model
 
 # Returns the model currently used
 def get_model():
@@ -10,7 +21,10 @@ def get_model():
 
 # Returns the embeddings for a sentence or list of sentences
 def embed(text):
-    return model.encode(text, convert_to_numpy=True)
+    mdl = load_model()
+    if mdl is None:
+        raise RuntimeError("Embedding model not available")
+    return mdl.encode(text, convert_to_numpy=True)
 
 # subtracts the shared mean vector of embedding1 and embedding two from all vectors
 def mean_decomp(embedding1, embedding2):
