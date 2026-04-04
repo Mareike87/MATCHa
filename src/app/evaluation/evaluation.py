@@ -8,24 +8,27 @@ from app.pipeline.matching_manager import run_matching
 from app.utils.input import read_mappings
 from paths import *
 
-# paths for eval
-# diabetes1path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_1/' + 'diab_lv1_'
-# diabetes2path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_2/' + 'diab_lv2_'
-# diabetes3path = 'C:/Users/Steff/Desktop/Generated Datasets/Diabetes/Diabetes_Level_3/' + 'diab_lv3_'
-# gym1path = 'C:/Users/Steff/Desktop/Generated Datasets/Gym/Gym_Level_1/' + 'gym_lv1_'
-# gym2path = 'C:/Users/Steff/Desktop/Generated Datasets/Gym/Gym_Level_2/' + 'gym_lv2_'
-# gym3path = 'C:/Users/Steff/Desktop/Generated Datasets/Gym/Gym_Level_3/' + 'gym_lv3_'
-# steam1path = 'C:/Users/Steff/Desktop/Generated Datasets/Steam/Steam_Level_1/' + 'steam_lv1_'
-# steam2path = 'C:/Users/Steff/Desktop/Generated Datasets/Steam/Steam_Level_2/' + 'steam_lv2_'
-# steam3path = 'C:/Users/Steff/Desktop/Generated Datasets/Steam/Steam_Level_3/' + 'steam_lv3_'
-#
-# diabetes = [(diabetes1path, "Diabetes"), (diabetes2path, "Diabetes"), (diabetes3path, "Diabetes")]
-# gym = [(gym1path, "Gym"), (gym2path, "Gym"), (gym3path, "Gym")]
-# steam = [(steam1path, "Steam"), (steam2path, "Steam"), (steam3path, "Steam")]
-#
-# datasets = [diabetes, gym, steam]
+#paths for evaluation
+diabetes1path = 'placeholder' + 'diab_lv1_'
+diabetes2path = 'placeholder' + 'diab_lv2_'
+diabetes3path = 'placeholder' + 'diab_lv3_'
+gym1path = 'placeholder' + 'gym_lv1_'
+gym2path = 'placeholder' + 'gym_lv2_'
+gym3path = 'placeholder' + 'gym_lv3_'
+steam1path = 'placeholder' + 'steam_lv1_'
+steam2path = 'placeholder' + 'steam_lv2_'
+steam3path = 'placeholder' + 'steam_lv3_'
 
-# util function for running datasets, which conform to these specific naming conventions
+diabetes = [(diabetes1path, "Diabetes"), (diabetes2path, "Diabetes"), (diabetes3path, "Diabetes")]
+gym = [(gym1path, "Gym"), (gym2path, "Gym"), (gym3path, "Gym")]
+steam = [(steam1path, "Steam"), (steam2path, "Steam"), (steam3path, "Steam")]
+
+datasets = [diabetes, gym, steam]
+
+# util function for running datasets, which conform to these specific naming conventions:
+# Dataset 1: base filepath + A1.csv
+# Dataset 2: base filepath + B1.csv
+# Ground Truth: base filepath + Mapping.csv
 def get_dataset_files(base):
     base = str(base)
     return (
@@ -34,7 +37,7 @@ def get_dataset_files(base):
         base + "Mapping.csv"
     )
 
-# runs chosen matchers on the specified datapaths with the specified ground truth file. Returns precision, recall,
+# runs chosen matchers on the specified data paths with the specified ground truth file. Returns precision, recall,
 # f1-score, average similarity of the found matches and runtime
 def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, instance):
     gt = read_mappings(gt_file)
@@ -65,7 +68,6 @@ def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, 
     else:
         f1_score = 2 * precision * recall / (precision + recall)
     runtime = end - start
-    #print(matches)
     return {
         "precision": precision,
         "recall": recall,
@@ -74,7 +76,11 @@ def run_experiment(datapath1, datapath2, gt_file, delimiter, threshold, schema, 
         "runtime": runtime
     }
 
+
 # runs each of the specified datasets in datasets and saves the results to a csv file
+# note: this function is specifically tuned to our evaluation setup.
+# If you want to run it on a different number of configurations or datasets you will have to modify it!
+# For single runs we advise running run_experiment
 def runeach_and_save():
     c = 0
     results = []
@@ -118,9 +124,9 @@ def runeach_and_save():
     df.to_csv(RESULTS_DIR / 'results.csv', index=False)
     return
 
+# loads result data from the specified path
 def load_data(csv_path):
     df = pd.read_csv(csv_path)
     df = df.rename(columns={"f1-score": "f1"})
     return df
 
-#runeach_and_save()

@@ -3,8 +3,18 @@ from app.pipeline.matching_manager import run_matching
 from app.utils.input import read_mappings
 from paths import *
 
-demo_path = RESOURCES_DIR / 'demo_files'
-demo_files = demo_path / 'demo_'
+
+# this file runs a basic demo of MATCHa, excluding embeddings
+# if you want to include embeddings, make sure you have a valid access token for HuggingFace and get access
+# to embedding gemma (or choose a different model in embedding.py)
+# then you can set includeEmbeddings to 'True' below
+
+# for more testing datasets see the example_datasets folder.
+# the paths for the directories 'diabetes', 'gym_members' and 'steam' are available in paths.py
+# in order to use one of these use the following statement (replace X with the complexity level of your choice)
+# demo_files = DIABETES_DATA_DIR / 'diabetes_lvX_'
+
+demo_files = DEMO_PATH / 'demo_'
 
 results = []
 

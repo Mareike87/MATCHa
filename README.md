@@ -4,6 +4,7 @@ MATCHa is a semantic schema matching algorithm designed to combine different mat
 
 ## Installation
 
+We have used Python 3.13 in this implementation.
 In order to install MATCHa, clone the repository and open a terminal in an IDE of your choice, then run the following commands:
 
 - `python -m venv .venv`
@@ -25,4 +26,4 @@ or like this:
 
 - `.venv/bin/python`
 
-Run run.py for a small demonstration of MATCHa. Please note that no embeddings are generated in this demo, as access to Huggingface and the EmbeddingGemma model cannot be guaranteed.
+Run run.py for a small demonstration of MATCHa. Please note that no embeddings are generated in this demo, as access to Huggingface and the EmbeddingGemma model need valid access tokens.
